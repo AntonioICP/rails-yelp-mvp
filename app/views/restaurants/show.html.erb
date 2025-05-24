@@ -1,37 +1,37 @@
-<h1><%= @restaurant.name %></h1>
+<h1 class="text-center"><%= @restaurant.name %></h1>
 
-<div id="restaurants">
-  <p>Address: <%= @restaurant.address %></p>
-  <p>Phone number: <% if @restaurant.phone_number %>
-    <%= @restaurant.phone_number %>
-    <% else %>
-    <%= "No contact information" %>
-  <% end %></p>
-  <p>Category: <%= (@restaurant.category).capitalize %></p>
+<div class="container">
+<div class="card p-4 shadow">
+  <p><strong>Address:</strong> <%= @restaurant.address %></p>
+  <p><strong>Phone number:</strong> <%= @restaurant.phone_number.present? ? @restaurant.phone_number : "No contact information"  %>
+  </p>
+  <p><strong>Category:</strong> <%= (@restaurant.category).capitalize %></p>
 
+  <h2>Reviews</h2>
+    <% if @restaurant.reviews.any? %>
+      <ul class="list-group">
+        <% @restaurant.reviews.each do |review| %>
+          <li class="list-group-item">
+            <%= review.content %> -
+            <%= "⭐" * review.rating %>
+          </li>
+        <% end %>
+      </ul>
+        <% else %>
+          <p class="text-muted">Be the first to leave a review!</p>
+    <% end %>
+    </div>
+  </div>
 
-  <div id="reviews">
-    <p><strong>Reviews:</strong></p>
-    <% if @restaurant.reviews != []%>
-    <ul>
-      <% @restaurant.reviews.each do |review| %>
-        <li>
-          <%= review.content %>
-          <%= "⭐" * review.rating %>
-        </li>
-      <% end %>
-      <% else %>
-        <p>Be the first to leave a review</p>
-    </ul>
+  <div class="container card p-4 shadow">
+    <%= simple_form_for [@restaurant, @review] do |f| %>
+      <%= f.input :content %>
+      <%= f.input :rating, collection: [0, 1, 2, 3, 4, 5], prompt: "Choose a rating" %>
+      <%= f.submit %>
     <% end %>
   </div>
-  <div class="new-review">
-  <%= simple_form_for [@restaurant, @review] do |f| %>
-  <%= f.input :content %>
-  <%= f.input :rating, collection: [0, 1, 2, 3, 4, 5], prompt: "Choose a rating" %>
-  <%= f.submit %>
-<% end %>
-</div>
 </div>
 
+<div class="text-center mt-4">
 <%= link_to "Back to list", restaurants_path, class: "btn btn-primary" %>
+</div>
