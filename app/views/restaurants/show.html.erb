@@ -1,0 +1,37 @@
+<h1><%= @restaurant.name %></h1>
+
+<div id="restaurants">
+  <p>Address: <%= @restaurant.address %></p>
+  <p>Phone number: <% if @restaurant.phone_number %>
+    <%= @restaurant.phone_number %>
+    <% else %>
+    <%= "No contact information" %>
+  <% end %></p>
+  <p>Category: <%= (@restaurant.category).capitalize %></p>
+
+
+  <div id="reviews">
+    <p><strong>Reviews:</strong></p>
+    <% if @restaurant.reviews != []%>
+    <ul>
+      <% @restaurant.reviews.each do |review| %>
+        <li>
+          <%= review.content %>
+          <%= "⭐" * review.rating %>
+        </li>
+      <% end %>
+      <% else %>
+        <p>Be the first to leave a review</p>
+    </ul>
+    <% end %>
+  </div>
+  <div class="new-review">
+  <%= simple_form_for [@restaurant, @review] do |f| %>
+  <%= f.input :content %>
+  <%= f.input :rating, collection: [0, 1, 2, 3, 4, 5], prompt: "Choose a rating" %>
+  <%= f.submit %>
+<% end %>
+</div>
+</div>
+
+<%= link_to "Back to list", restaurants_path, class: "btn btn-primary" %>
